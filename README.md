@@ -1,5 +1,7 @@
 # TodoList Task Manager
 
+No live DEMO of The Task Manager currently
+
 A task manager, Implemented with thymeleaf and spring boot. The main features are:
   * Spring Boot Security with custom database login
   * Spring Boot JPA for data extraction
