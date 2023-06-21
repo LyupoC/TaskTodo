@@ -29,8 +29,8 @@ Run the database script from sql_scripts/todolist.sql to generate the postgreSQL
 
 Default users generated with the script:
 ```bash
-user: susan ; password: fun123
-user: john ; password: fun123
+user: susan ; password: demo123
+user: john ; password: demo123
 ```
 <img src="readme_images/sqlDiagram.png" width="800" alt="" style="min-width:300px;" />
 
