@@ -1,0 +1,90 @@
+
+    <div th:fragment="taskTextView (task)"  class="p-0 m-0" >
+        <div class="row justify-content-center taskTextView" id="taskTextView" >
+            <di class="col-1">
+                <div class="priority p-0 m-0">
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Task Priority"  th:classappend="${task.priority} ? ('p' + ${task.priority}) : ('p' + 3)"  class="priorityCircle" > </span>
+                </div>
+            </di>
+            <div class="col-6  col-xl-4 col-lg-4 col-sm-6">
+                <p th:text="${task.title}"></p>
+            </div>
+            <div class="col-2 d-none d-mg-block  d-xl-block d-lg-block">
+                <p th:text="${#dates.format(task.createdDate,  'dd-MM-yyyy')}">
+            </div>
+            <div class="col-auto" >
+                <div class="row p-0 m-0">
+                    <div class="col-6 p-0 m-0" >
+                        <input type="checkbox"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Task Status" class="form-check p-0 m-0 "  th:checked="${task.status} == 1"  autocompleted  th:onclick="toggleStatus(this)">
+                    </div>
+                    <div class="col-6 m-0" >
+                        <a href="#2" th:onclick="displayEditField(this)" > <i class="bi bi-pencil-square edit icon-medium"></i> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="taskEditForm (task, list, index)"  class="p-0 m-0 " >
+        <div class="editForm m-1 py-4 px-3 px-md-0" id="editForm" style="display: none">
+            <div class="row">
+                <div class="col-md-1" ></div>
+                <div class="col-md-1 d-flex align-bottom"   >
+                    <input type="checkbox"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Task Status" class="form-check m-0"  th:checked="${list.tasks[__${index}__].status} == 1"  autocompleted
+                           th:onclick="toggleStatus(this)">
+
+                    <input type="hidden" id="taskList" th:field="${list.tasks[__${index}__].list}" th:value="${list.id}" >
+                    <input type="hidden" id="id" th:field="${list.tasks[__${index}__].id}">
+                    <input type ="hidden" id="taskStatus" name ="status" th:field ="${list.tasks[__${index}__].status}" >
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputTitle" >Title</label>
+                    <input type="text" class="form-control" id="inputTitle" th:field="${list.tasks[__${index}__].title}"   placeholder="Title">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('tasks[__${index}__].title')}" th:errors="*{tasks[__${index}__].title}"  ></div>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="priority"> Priority</label>
+                    <select th:field="${list.tasks[__${index}__].priority}"  id="priority" class="form-control">
+                        <option th:value="1" th:text="1"></option>
+                        <option th:value="2" th:text="2"></option>
+                        <option th:value="3" th:text="3"></option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="taskDeadline" >Task Deadline: </label>
+                    <input type ="date" name="deadlineDate" th:field="${list.tasks[__${index}__].deadlineDate}" placeholder="deadlineDate" id = "taskDeadline" class="form-control" >
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('tasks[__${index}__].deadlineDate')}" th:errors="*{tasks[__${index}__].deadlineDate}"></div>
+
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-md-2"></div>
+                <div class="form-group col-md-4">
+                    <label for="taskDescription">Task Description</label>
+                    <textarea id ="taskDescription"  th:field="${list.tasks[__${index}__].description}" placeholder="taskDesciption" class="form-control mb-4 col-4 textDescription"> </textarea>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('tasks[__${index}__].description')}" th:errors="*{tasks[__${index}__].description}"  ></div>
+                </div>
+                <div class="col-md-4 mt-4"  >
+                    <div class="row justify-content-end  p-0 m-0 "  >
+                        <div class="col-auto justify-content-end p-0 m-0" >
+                            <a href="#a"   th:onclick="deleteRowFormSelect(true, this)" ><i class="bi bi-trash remove icon-red icon-medium"
+                                                                                            data-bs-toggle="tooltip"
+                                                                                            data-bs-placement="bottom"
+                                                                                            title="Remove Task" ></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end p-0 "  >
+                        <div class="col-auto justify-content-end">
+                            <i class="bi bi-info-circle-fill mr-0 p-0 text-black-50 btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Created Date" ></i>
+                            <label class="date-label my-2 text-black-50 "  style="font-size:13px;" th:text="${#dates.format(task.createdDate, 'dd-MMM-yyyy')}"></label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" th:field="${list.tasks[__${index}__].createdDate}" >
+                </div>
+
+            </div>
+        </div>
+    </div>

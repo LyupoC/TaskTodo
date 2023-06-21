@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add List</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+    <script th:replace="fragments/js/listEdit.html :: listEditingScript" > </script>
+    <script th:replace="fragments/js/commonJS.html :: commonJS" > </script>
+
+</head>
+<body>
+
+    <header>
+        <nav th:replace="fragments/navBar.html :: navBar"></nav>
+    </header>
+    <main class="pt-5 mt-5">
+        <div class="container-sm  d-flex flex-column justify-content-center align-items-center p-0">
+            <div class="row list bg-transparent mt-4 w-75">
+                    <div class ="col">
+                        <form th:action="@{/lists/createList}" th:object="${list}" method="post" class="p-0 m-0">
+                            <div th:replace="fragments/ListEditCreateForm.html :: listAndTasksEditForm(${list})"></div>
+                        </form>
+                        <br>
+                        <a th:href="@{/lists/list}">Back to Lists list</a>
+                    </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        triggerTooltips();
+    </script>
+
+</body>
+</html>

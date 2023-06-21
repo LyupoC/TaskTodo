@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit/View Task</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script th:replace="fragments/js/commonJS.html :: commonJS"></script>
+
+
+</head>
+<body>
+<header>
+    <nav th:replace="fragments/navBar.html :: navBar"></nav>
+</header>
+
+
+<main class="pt-5">
+    <div class="container-sm mt-0 w-100 min-w-100 justify-content-center p-0">
+        <section class="p-0 mt-10 d-flex flex-column align-items-center justify-content-center">
+            <div class="row list bg-transparent m-5 align-items-center w-75 p-0">
+                <div class="col">
+                    <div class="card border-0 min-vw-50 p-0 m-0 border-rounded-15" >
+                        <div class="card-body m-0 min-vw-50 p-0 pb-4 ">
+                            <div class=" bg-header text-dark text-center p-2 m-0 mb-3 border-rounded-15">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="m-0"> List </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-8">
+                                    <b> List Title: </b> <span id="listTitle" th:text="${list.title}"> </span>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-8">
+                                    <b> List Description: </b> <span id="listDescription"
+                                                                     th:text="${list.description}"> </span>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center">
+                                <div class="col-4">
+                                    <b> List created date: </b> <span id="listCreated"
+                                                                      th:text="${#dates.format(list.createdDate,  'dd-MM-yyyy')}"> </span>
+                                </div>
+
+                                <div class="col-4">
+                                    <b> List deadline date: </b> <span id="listDeadline"
+                                                                       th:text="${#dates.format(list.deadlineDate,  'dd-MM-yyyy')}"> </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card border-0 min-vw-50 mt-5 p-0 mx-0 border-rounded-15" >
+                        <div class="card-body m-0 min-vw-50 p-0">
+                            <div class=" bg-header text-dark text-center  p-2 m-0 mb-3 border-rounded-15"
+                                >
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="m-0"> Task </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tasksList" class="p-0 m-0">
+                                <form th:action="@{/tasks/update}" th:object="${task}" method="post" class="p-0 m-0">
+                                    <div class="col editForm m-1 py-2 px-3 px-md-0 " id="editForm">
+                                        <div class="row p-0 m-0 ">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-1 d-flex align-bottom ">
+                                                <input type="checkbox" data-bs-toggle="tooltip"
+                                                       data-bs-placement="bottom" title="Task Status"
+                                                       class="form-check m-0" th:checked="${task.status} == 1"
+                                                       autocompleted onclick="toggleStatus(this)">
+                                                <input type="hidden" id="taskList" th:field="${task.list}"
+                                                       th:value="${task.list.id}">
+                                                <input type="hidden" id="id" th:field="${task.id}">
+                                                <input type="hidden" id="taskStatus" name="status"
+                                                       th:field="${task.status}">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputTitle">Title</label>
+                                                <input type="text" class="form-control" id="inputTitle"
+                                                       th:field="${task.title}" placeholder="Title">
+                                                <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}"
+                                                     th:errors="*{title}"></div>
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label for="priority"> Priority</label>
+                                                <select th:field="${task.priority}" id="priority" class="form-control">
+                                                    <option th:value="1" th:text="1"></option>
+                                                    <option th:value="2" th:text="2"></option>
+                                                    <option th:value="3" th:text="3"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="taskDeadline">Task Deadline: </label>
+                                                <input type="date" name="deadlineDate" th:field="${task.deadlineDate}"
+                                                       placeholder="deadlineDate" id="taskDeadline"
+                                                       class="form-control">
+                                                <div class="alert alert-danger"
+                                                     th:if="${#fields.hasErrors('deadlineDate')}"
+                                                     th:errors="*{deadlineDate}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row p-0 m-0">
+                                            <div class="col-md-2 p-0 m-0"></div>
+                                            <div class="form-group col-md-4">
+                                                <label for="taskDescription">Task Description</label>
+                                                <textarea id="taskDescription" th:field="${task.description}"
+                                                          placeholder="taskDesciption"
+                                                          class="form-control mb-4 col-4 textDescription"> </textarea>
+                                                <div class="alert alert-danger"
+                                                     th:if="${#fields.hasErrors('description')}"
+                                                     th:errors="*{description}"></div>
+                                            </div>
+
+                                            <div class="col-md-4 mt-4">
+                                                <div class="row justify-content-end p-0 m-0 ">
+                                                    <div class="col-auto justify-content-end p-0 m-0">
+                                                        <a href="#a" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                           title="Remove Task" th:href="@{/tasks/delete/} + ${task.id}"><i
+                                                                class="bi bi-trash remove icon-red icon-medium"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row justify-content-end p-0 ">
+                                                    <div class="col-auto justify-content-end">
+                                                        <i class="bi bi-info-circle-fill mr-0 p-0 text-black-50 btn"
+                                                           data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                           title="Created Date"></i>
+                                                        <label class="date-label my-2 text-black-50 "
+                                                               style="font-size:13px;"
+                                                               th:text="${#dates.format(task.createdDate, 'dd-MMM-yyyy')}"></label>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" th:field="${task.createdDate}">
+                                            </div>
+                                        </div>
+
+                                        <input type="submit" value="Save"
+                                               class="btn btn-primary col-3 col-md-2 mx-3">
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <br>
+                    <a th:href="@{/lists/list}">Back to Lists list</a>
+                </div>
+            </div>
+            <br>
+            <br>
+            <h3 style="text-align: center;"> Comments </h3>
+
+            <div class="container  d-flex  flex-column ">
+                <div class="card mb-4 w-50 align-self-center " th:each="comment, comentStat : ${task.comments}">
+                    <div class="card-body justify-content-center">
+                        <p th:text="${comment.content}"></p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(31).webp" alt="avatar"
+                                     width="25"
+                                     height="25"/>
+                                <p class="small mb-0 ms-2" th:text="${comment.user.username}"></p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center text-primary">
+                                <p class="small mb-0"
+                                   th:text="${#dates.format(comment.dateCreated,  'dd-MM-yyyy')}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-50 align-self-center text-end" id="addComment">
+                    <form th:action="@{/comments/}" th:object="${comment}" method="post">
+                        <input type="hidden" class="form-control" th:field="${comment.task}">
+                        <textarea class="form-control" th:field="${comment.content}"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+                    </form>
+
+                </div>
+            </div>
+        </section>
+    </div>
+
+</main>
+<script>
+    triggerTooltips();
+</script>
+
+</body>
+</html>

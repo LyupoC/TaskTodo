@@ -1,0 +1,35 @@
+<div th:fragment="listForm (list)" class="m-3 m-md-0" >
+
+  <input type="hidden" th:field="${list.id}">
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <label for="listTitle">List Title</label>
+      <input type = "text" id="listTitle" name="title" th:field="${list.title}" placeholder="Title" class="form-control col-4">
+      <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <label for="listDescription">List Description</label>
+      <textarea id ="listDescription" th:field="${list.description}" placeholder="Description" class="form-control mb-4 col-4"> </textarea>
+      <div class="alert alert-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <label for="createdDate">Date Created </label>
+      <input type="date" id ="createdDate" readonly th:field="${list.createdDate}" placeholder="createdDate" class="form-control col-2" /> </input>
+
+    </div>
+
+    <div class="col-md-4">
+      <label for="listDeadline">Deadline</label>
+      <input type="date" id ="listDeadline" th:field="${list.deadlineDate}" placeholder="Deadline" class="form-control col-2" />
+      <div class="alert alert-danger" th:if="${#fields.hasErrors('deadlineDate')}" th:errors="*{deadlineDate}"></div>
+    </div>
+
+  </div>
+</div>

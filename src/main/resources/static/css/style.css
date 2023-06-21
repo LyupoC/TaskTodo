@@ -1,0 +1,165 @@
+body {
+
+    font-family: "Myriad Pro", sans-serif !important;
+    background-color: #f8f8f8;
+
+}
+
+.priorityCircle {
+    height: 15px;
+    width: 15px;
+    /*background-color: #bbb;*/
+    border-radius: 50%;
+    display: inline-block;
+
+}
+
+.border-rounded-15 {
+    border-radius: 15px !important;
+}
+
+#headerNav {
+    background: rgba(0, 144, 240, 0.75);
+    border-bottom: solid 1px #aaa;
+}
+
+#tasksList .editForm {
+    margin: 5px 0 5px 0 !important;
+}
+
+.btn-primary {
+    background-color: #0090F0;
+}
+
+.nav-item .btn-primary {
+    background-color: #ffffff;
+    color: black;
+}
+
+.nav-item .btn-primary:hover {
+    background-color: #00d4f0;
+}
+
+.p1 {
+    background-color: #FCECEC;
+    border: solid 2px #F44336;
+
+}
+
+.p2 {
+    background-color: #FFF7C3;
+    border: solid 2px #FFCC00;
+
+}
+
+.p3 {
+    background-color: #EBFFD0;
+    border: solid 2px #5CBB77;
+
+}
+
+#tasksList .row:nth-of-type(odd) .editForm {
+    background-color: #efefef;
+
+}
+.list .edit, .list .remove{
+    margin:0 0 0 0;
+    display:inline;
+    float:right;
+}
+
+.list .edit{
+    margin-right: 5px;
+}
+
+.bg-header {
+    background-color: #fff;
+
+    font-weight: bold !important;
+
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-image: linear-gradient(to right, #dedede, #cdcdcd, #dedede) 1;
+
+
+}
+
+tr {
+    padding: 0;
+    margin: 0;
+}
+
+td {
+    padding: 10px;
+    margin: 0;
+}
+
+
+#addTask .form-control {
+    border-color: transparent;
+}
+
+#addTask .form-control:focus {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+#addTask .select-input.form-control[readonly]:not([disabled]) {
+    background-color: #fbfbfb;
+}
+
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    border: solid 1px;
+}
+
+.card {
+    /*box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.19);*/
+
+}
+
+.icon-blue {
+    color: #0a58ca;
+}
+
+.icon-large {
+    font-size: 50px;
+}
+
+.icon-medium {
+    font-size: 17px;
+}
+
+.list .task:hover {
+    background-color: #f8f8f8;
+}
+
+
+.box-shadow {
+    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.25);
+
+}
+
+.icon-red {
+    color: #F44336;
+}
+
+
+.text-shadow {
+    text-shadow: 0 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+
+@media only screen and (max-width: 550px){
+
+    .container-sm .row{width:100% !important; padding-left:10px; padding-right:10px;}
+    .container-sm{min-width:100% !important;}
+    .container .card {width:100% !important;}
+    #headerNav{padding-left:0 !important;}
+    #addComment{width:100% !important;}
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <script th:fragment="listEditingScript" th:inline="javascript">
+
+            function addRowFromSelect() {
+
+              /*<![CDATA[*/
+
+              var listID = /*[[${list.id}]]*/ 'default'
+
+              /*]]>*/
+
+              let rowCount = $('#tasksList').children().length;
+              $( '<div class="m-1 py-4 px-3 px-md-0 editForm">' +
+                  '<div class="row">\n' +
+                  '            <div class="col-md-1" ></div>\n' +
+                  '            <div class="col-md-1  d-flex align-bottom">\n' +
+                  '                <input type="checkbox"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Task Status" class="form-check m-0" ' +
+                  '                       onclick="toggleStatus(this)">\n' +
+                  '                <input type="hidden" id="tasks'+ rowCount + '.list" name="tasks[' + rowCount + '].list" value="' + listID + '">' +
+                  '                <input type ="hidden" id="taskStatus" id="tasks'+ rowCount + '.status" name="tasks[' + rowCount + '].status" value="0">' +
+                  '            </div>\n' +
+                  '            <div class="form-group col-md-4">\n' +
+                  '                <label for="inputTitle" >Title</label>\n' +
+                  '                <input type="text" class="form-control"  id="tasks'+ rowCount + '.title" name="tasks[' + rowCount + '].title" placeholder="Title" class="form-control" value="" >\n' +
+                  '            </div>\n' +
+                  '            <div class="form-group col-md-1">\n' +
+                  '                <label for="priority"> Priority</label>\n' +
+                  '                <select id="tasks'+ rowCount + '.priority" name="tasks[' + rowCount + '].priority" class="form-control">\n' +
+                  '                     <option value="1">1</option>\n' +
+                  '                      <option value="2">2</option>\n' +
+                  '                      <option value="3">3</option>\n' +
+                  '                </select>\n' +
+                  '            </div>\n' +
+                  '            <div class="form-group col-md-3">\n' +
+                  '                <label for="taskDeadline" >Task Deadline: </label>\n' +
+                  '                <input type ="date"  id="tasks'+ rowCount + '.deadlineDate" name="tasks[' + rowCount + '].deadlineDate" class="form-control">\n' +
+                  '            </div>\n' +
+                  '        </div>\n' +
+                  '        <div class="row">\n' +
+                  '            <div class="col-md-2"></div>\n' +
+                  '            <div class="form-group col-md-4">\n' +
+                  '                <label for="taskDescription">Task Description</label>\n' +
+                  '                <textarea id ="taskDescription" id="tasks'+ rowCount + '.description" name="tasks[' + rowCount + '].description"  placeholder="taskDesciption" class="form-control mb-4 col-4 textDescription"> </textarea>\n' +
+                  '            </div>\n' +
+                  '            <div class="col-md-4 mt-4"   >\n' +
+                  '            <div class="row justify-content-end  p-0 m-0 "  >\n' +
+                  '                 <div class="col-auto justify-content-end p-0 m-0">\n' +
+                  '                     <a href="#a" onclick="deleteRowFormSelect(true, this)" ><i  data-bs-toggle="tooltip" data-bs-placement="bottom" title="Remove Task" class="bi bi-trash remove icon-red icon-medium" ></i></a>\n' +
+                  '                  </div>\n' +
+                  '             </div>\n' +
+                  '                <div class="row justify-content-end p-0 "  >\n' +
+                  '                  <div class="col-auto justify-content-end">\n' +
+                  '                  <i class="bi bi-info-circle-fill mr-0 p-0 text-black-50 btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Created Date" ></i>\n' +
+                  '                  <label class="date-label my-2 text-black-50 "  style="font-size:13px;">Today</label>\n' +
+                  '               </div>\n' +
+                  '            </div>\n' +
+                  '         </div>\n' +
+                  '        </div>\n' +
+                  '    </div>' +
+                  '</div>' +
+
+                  '').appendTo("#tasksList");
+
+              triggerTooltips();
+            }
+
+            function deleteRowFormSelect(oldTask, element){
+
+                $(element).tooltip('dispose');
+              let taskId =$(element).parentsUntil("#tasksList").find('input[id="id"]').val();
+
+              if(taskId){
+
+                $(element).parentsUntil("#tasksList").hide();
+                $(element).parentsUntil("#tasksList").children().last().after('<input type="hidden" name="toDelete" value=' + taskId +' >');
+
+              }
+              else{
+
+
+                $(element).parentsUntil("#tasksList").remove();
+
+              }
+
+            }
+
+            $(document).ready(function() {
+              let textareas = document.getElementsByClassName("textDescription");
+
+              for(const textarea of textareas)
+              {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+              }
+
+              let errors = document.getElementsByClassName("alert");
+
+              for(const error of errors){
+                displayEditField(error);
+              }
+            });
+
+
+            function displayEditField(element){
+
+              $(element).parentsUntil("#tasksList").find('div[id="taskTextView"]').hide();
+              let ele= $(element).parentsUntil("#tasksList").find('div[id="editForm"]');
+
+              $(ele).css("display", "block");
+
+            }
+
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

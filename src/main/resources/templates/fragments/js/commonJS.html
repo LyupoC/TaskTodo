@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <script th:fragment="commonJS" th:inline="javascript">
+            function triggerTooltips(){
+
+                // Initialize tooltips
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                })
+            }
+            function toggleStatus(ele){
+
+                let element = $(ele).parentsUntil("#tasksList").find('input[id="taskStatus"]');
+                let currentValue = element.val();
+
+                if(parseInt(currentValue) === 1){
+                    element.val(0);
+                }
+                else{
+                    element.val(1);
+                }
+            }
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

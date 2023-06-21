@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script>
+        $(document).ready(function(){
+            $(".dropdown-menu a").click(function (){
+
+                $('input[name="username"]').val($(this).data("user"));
+                $('input[name="password"]').val($(this).data("pass"));
+            });
+        });
+    </script>
+
+</head>
+
+<body class="align-items-center " style="background-color: #ebebeb;">
+
+
+<div class="row justify-content-center align-middle rounded	mt-5 ">
+
+    <div id="loginbox" class="col-md-3 col-sm-6 rounded align-middle p-3" style="background-color: #fefefe;">
+
+        <div class="panel panel-info rounded-top">
+            <div class="panel-heading">
+                <div class="panel-title">Sign In: In-Memory Authentication</div>
+            </div>
+
+            <div style="padding-top: 30px" class="panel-body">
+
+                <!-- Login Form -->
+                <form th:action="@{/authenticateTheUser}"
+                      method="POST" class="form-horizontal">
+
+                    <!-- Place for messages: error, alert etc ... -->
+                    <div class="form-group">
+                        <div class="col-xs-15">
+                            <div>
+
+                                <!-- Check for login error -->
+
+                                <div th:if="${param.error}">
+                                    <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                                        Invalid username and password.
+                                    </div>
+                                </div>
+
+                                <!-- Check for logout -->
+
+                                <div th:if="${param.logout}">
+                                    <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                        You have been logged out.
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User name -->
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+
+                        <input type="text" name="username" placeholder="username" class="form-control">
+                    </div>
+
+                    <!-- Password -->
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+
+                        <input type="password" name="password" placeholder="password" class="form-control">
+                    </div>
+
+
+                    <div class="dropdown show">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="sampleUsers" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sample login details
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="sampleUsers">
+                            <a class="dropdown-item" href="javascript:void(0);" data-user="susan" data-pass="demo123">user:  susan  &nbsp  pass:  demo123</a>
+                            <a class="dropdown-item" href="javascript:void(0);" data-user="john" data-pass="demo123">user: john    &nbsp&nbsp  pass:  demo123</a>
+
+                        </div>
+                    </div>
+
+                    <!-- Login/Submit Button -->
+                    <div style="margin-top: 10px" class="form-group">
+                        <div class="col-sm-6 controls">
+                            <button type="submit" class="btn btn-success">Login</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

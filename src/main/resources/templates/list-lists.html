@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Lists</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script th:replace="fragments/js/commonJS.html :: commonJS"></script>
+
+    <script th:inline="javascript">
+
+        function markCompleted(taskId, elementIndex) {
+
+            console.log("element: " + elementIndex + " task ID " + taskId);
+            window.location.href = "/tasks/markCompleted/" + taskId + "/" + (elementIndex + 1);
+
+        }
+
+        $(document).ready(function () {
+
+            //scroll to the list, if scroll url parameter is present
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const listNumber = parseInt(urlParams.get('scrollToList'));
+            const navbarSize = $('#headerNav').outerHeight();
+            console.log(navbarSize);
+
+            if (listNumber) {
+
+                $('html, body').animate({
+                    scrollTop: $("#lists").children(".list:nth-child(" + listNumber + ")").offset().top - navbarSize - 45
+                });
+
+            }
+
+            $('#TaskDetailsModal').on('show.bs.modal', function (e) {
+
+                //make sure that the taskDetails nav-tab is active
+                setDetailsNavTabActive();
+
+                //get data to display
+                var taskTitle = $(e.relatedTarget).data('tasktitle');
+                var taskdeadline = $(e.relatedTarget).data('taskdeadline');
+                var taskcreateddate = $(e.relatedTarget).data('taskcreateddate');
+                var priority = $(e.relatedTarget).data('priotity');
+                var status = $(e.relatedTarget).data('status');
+                var description = $(e.relatedTarget).data('description');
+                var comments = $(e.relatedTarget).data('comments');
+
+
+                //remove comments from previously displayed tasks
+                $("#taskComments").empty();
+
+                for (let i = 0; i < comments.length; i++) {
+
+                    let content = comments[i].content;
+                    let dateCreated = comments[i].dateCreated;
+                    let username = comments[i].user;
+
+                    $('              <div class="card mb-4 ">\n' +
+                        '                    <div class="card-body justify-content-center">\n' +
+                        '                        <p>' + content + '</p>\n' +
+                        '                        <div class="d-flex justify-content-between">\n' +
+                        '                            <div class="d-flex flex-row align-items-center">\n' +
+                        '                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(31).webp" alt="avatar"\n' +
+                        '                                     width="25"\n' +
+                        '                                     height="25"/>\n' +
+                        '                                <p class="small mb-0 ms-2" >' + username + '</p>\n' +
+                        '                            </div>\n' +
+                        '                            <div class="d-flex flex-row align-items-center text-primary">\n' +
+                        '                                <p class="small mb-0"\n' +
+                        '                                   ">' + dateCreated + '</p>\n' +
+
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>' +
+                        '').appendTo("#taskComments");
+
+                }
+
+                switch (priority) {
+
+                    case 1:
+                        priority = "High"
+                        break;
+                    case 2:
+                        priority = "Medium"
+                        break;
+                    case 3:
+                        priority = "Low"
+                        break;
+                    default:
+                        priority = "Low";
+                }
+
+
+                $(e.currentTarget).find('span[id="title"]').text(taskTitle);
+                $(e.currentTarget).find('span[id="taskdeadline"]').text(taskdeadline);
+                $(e.currentTarget).find('span[id="taskcreateddate"]').text(taskcreateddate);
+                $(e.currentTarget).find('span[id="priotity"]').text(priority);
+                $(e.currentTarget).find('span[id="description"]').text(description);
+                $(e.currentTarget).find('span[id="status"]').text(status === 1 ? "DONE" : "Not Done");
+
+            });
+
+
+            function setDetailsNavTabActive() {
+                var taskDetailsTab = $('.nav-tabs').children('button:nth-child(1)');
+                taskDetailsTab.click();
+            }
+
+
+        });
+
+    </script>
+
+</head>
+<body>
+
+<header>
+    <nav th:replace="fragments/navBar.html :: navBar"></nav>
+</header>
+
+
+<main class="pt-5 mt-5">
+    <div class="container-sm d-flex flex-column justify-content-center align-items-center p-0" id="lists">
+        <div class="row list bg-transparent mt-4 w-75 "
+                 th:each="tempList, tmpListStat : ${lists}">
+                <div class="col ">
+                    <div class="card border-rounded-15 border-0 min-vw-50 ">
+                        <div class="card-body m-0 min-vw-75 px-0 pt-0 pb-4 ">
+                            <div class=" bg-header text-dark  p-3 m-0 mb-4 border-rounded-15" >
+                                <div class="row">
+                                    <div class="col-9">
+                                        <h4 class="m-0" th:text="${tempList.title}"></h4>
+                                    </div>
+                                    <div class="col ">
+                                        <a class="edit" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           title="Edit List"
+                                           th:href="@{/lists/showListUpdateForm/} + ${tempList.id}"><i
+                                                class="bi bi-pencil-square edit icon-medium"></i></a>
+                                        <a class="remove" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                           title="Remove List"
+                                           th:href="@{/lists/delete/} + ${tempList.id}"><i
+                                                class="bi bi-trash icon-red icon-medium"></i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="tasksList" class="p-0 m-0 ">
+                                <div class="row d-flex justify-content-center task p-0 m-0 "
+                                     th:each="task, taskStat: ${tempList.getTasks()}">
+                                    <div class="col-1">
+                                        <div class="priority p-0 m-0">
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                  title="Task Priority"
+                                                  th:classappend="${task.priority} ? ('p' + ${task.priority}) : ('p' + 3)"
+                                                  class="priorityCircle"> </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 col-md-4 col-lg-4 col-xl-4">
+                                        <p th:text="${task.title}"></p>
+                                    </div>
+                                    <div class="col-3 text-center d-none d-md-block d-xl-block d-lg-block ">
+                                        <p th:text="${#dates.format(task.createdDate,  'dd-MM-yyyy')}">
+                                    </div>
+                                    <div class="col-auto ">
+                                        <div class="row p-0 m-0  ">
+                                            <div class="col-1 ">
+                                                    <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                          title="View Task Details">
+                                                        <button type="button" class="btn m-0 p-0" data-bs-toggle="modal"
+                                                                data-bs-target="#TaskDetailsModal"
+                                                                th:data-listid="${tmpListStat.index}"
+                                                                th:data-taskid="${taskStat.index}"
+                                                                th:data-tasktitle="${task.title}"
+                                                                th:data-taskdeadline="${#dates.format(task.deadlineDate,  'dd-MM-yyyy')}"
+                                                                th:data-taskcreateddate="${#dates.format(task.createdDate,  'dd-MM-yyyy')}"
+                                                                th:data-priotity="${task.priority}"
+                                                                th:data-status="${task.status}"
+                                                                th:data-description="${task.description}"
+                                                                th:data-comments="${task.getCommentsJSON()}"><i
+                                                                class="bi bi-eye"></i></button>
+                                                    </span>
+                                            </div>
+                                            <div class="col-1 ">
+                                                <a class="m-0 p-0" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                   title="Edit Task" th:href="@{/tasks/} + ${task.id}"><i
+                                                        class="bi bi-pencil-square "></i></a>
+                                            </div>
+                                            <div class="col-1 ">
+                                                <input type="checkbox" data-bs-toggle="tooltip"
+                                                       data-bs-placement="bottom" title="Mark Complete"
+                                                       class="form-check" th:checked="${task.status } == 1"
+                                                       autocompleted
+                                                       th:onclick="markCompleted([[${task.id}]], [[${tmpListStat.index}]])">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form action="#" th:action="@{/logout}" method="POST">
+                <input type="submit" value="Logout" class="btn btn-outline-primary mt-2"/>
+            </form>
+    </div>
+</main>
+
+
+<!-- Modal -->
+<div class="modal fade" id="TaskDetailsModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskDetailsTitle">Task Details</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-task-tab" data-bs-toggle="tab" data-bs-target="#taskDetails"
+                            type="button" role="tab" aria-controls="nav-task-tab" aria-selected="true">Task
+                    </button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#taskComments"
+                            type="button" role="tab" aria-controls="nav-comments-tab" aria-selected="false">Comments
+                    </button>
+
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="modal-body tab-pane fade show active" role="tabpanel" aria-labelledby="nav-task-tab"
+                     id="taskDetails">
+                    <ul class="list-group list-group-vertical text-center">
+                        <li class="list-group-item"><b> Task Title: </b> <span id="title"> </span></li>
+                        <li class="list-group-item"><b> Deadline: </b> <span id="taskdeadline"> </span></li>
+                        <li class="list-group-item"><b> Date Created: </b> <span id="taskcreateddate"> </span></li>
+                        <li class="list-group-item"><b> Priority: </b> <span id="priotity"> </span></li>
+                        <li class="list-group-item"><b> Status: </b> <span id="status"> </span></li>
+                        <li class="list-group-item border-bottom-0"><b>Description: </b></li>
+                        <li class="list-group-item"><span id="description"> </span></li>
+
+                    </ul>
+                </div>
+                <div class="modal-body tab-pane fade " role="tabpanel" aria-labelledby="nav-comments-tab"
+                     id="taskComments"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    triggerTooltips();
+</script>
+</body>
+</html>
